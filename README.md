@@ -47,7 +47,6 @@ Supported formats are:
         4   sell     sell    VERB    VBP
         5   books    book    NOUN    NNS
         6   .        .       PUNCT   .
-		
 	
   * osl: One sentence per line, custom delimiter for annotation
 	
@@ -61,7 +60,6 @@ Supported formats are:
         sell     sell    VERB    VBP
         books    book    NOUN    NNS
         .        .       PUNCT   .
-		
 	
   * vrt: Tab-separated, one token per line, sentences as s-tags
 	

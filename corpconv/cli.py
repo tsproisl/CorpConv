@@ -5,16 +5,16 @@ import functools
 import logging
 
 
-import corpus_readers
-import corpus_writers
+from corpconv import corpus_readers
+from corpconv import corpus_writers
 
 
 # format, --only-tokens, delimiter, number of fields
 
 def arguments():
     parser = argparse.ArgumentParser(description="Convert a corpus from a given input format to the desired output format.")
-    parser.add_argument("-i", "--input-format", choices=["conll", "osl", "tsv", "vrt"], required=True, help="Input format. conll: Tab-separated, one token per line with token id, empty line after sentences, empty fields marked with \"_\"; tsv: Tab-separated, one token per line, empty line after sentences; osl: One sentence per line, custom delimiter for annotation; vrt: Tab-separated, one token per line, sentences as s-tags")
-    parser.add_argument("-o", "--output-format", choices=["conll", "osl", "tsv", "vrt"], required=True, help="Input format. conll: Tab-separated, one token per line, empty line after sentences; osl: One sentence per line, custom delimiter for annotation; vrt: Tab-separated, one token per line, sentences as s-tags")
+    parser.add_argument("-i", "--input-format", choices=["conll", "osl", "tsv", "vrt"], required=True, help="Input format. conll: Tab-separated, one token per line with token id, empty line after sentences, empty fields marked with \"_\"; osl: One sentence per line, custom delimiter for annotation; tsv: Tab-separated, one token per line, empty line after sentences; vrt: Tab-separated, one token per line, sentences as s-tags")
+    parser.add_argument("-o", "--output-format", choices=["conll", "osl", "tsv", "vrt"], required=True, help="Output format. See --input-format.")
     parser.add_argument("-d", "--delimiter", type=str, default="\t", help="Delimiter in osl format (default: \"\\t\".")
     parser.add_argument("-n", "--nfields", type=int, help="Number of fields in osl format (only for reading from osl).")
     parser.add_argument("FILE", type=argparse.FileType("r"), help="The input file")
