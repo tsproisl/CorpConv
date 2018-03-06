@@ -14,7 +14,7 @@ here = path.abspath(path.dirname(__file__))
 with open(path.join(here, 'README.rst')) as fh:
     long_description = fh.read()
 
-version = "0.1.0"
+version = "0.1.1"
 
 setup(
     name='CorpConv',
@@ -25,7 +25,7 @@ setup(
         'corpconv',
         # 'corpconv.test',
     ],
-    entry_points = {
+    entry_points={
         'console_scripts': ['corpconv=corpconv.cli:main'],
     },
     url="https://github.com/tsproisl/CorpConv",
