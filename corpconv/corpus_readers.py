@@ -45,7 +45,7 @@ def read_osl(corpus, delimiter, nr_of_fields):
         if line == "":
             continue
         sentence_id += 1
-        tokens = [t.rsplit(delimiter, maxsplit=nr_of_fields) for t in line.split()]
+        tokens = [t.rsplit(delimiter, maxsplit=nr_of_fields) for t in line.split(" ")]
         yield Sentence("s%d" % sentence_id, tokens)
 
 
