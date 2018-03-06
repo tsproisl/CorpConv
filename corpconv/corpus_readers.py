@@ -41,7 +41,7 @@ def read_conll(corpus):
 def read_osl(corpus, delimiter, nr_of_fields):
     sentence_id = 0
     for line in corpus:
-        line = line.rstrip()
+        line = line.rstrip("\n")
         if line == "":
             continue
         sentence_id += 1
