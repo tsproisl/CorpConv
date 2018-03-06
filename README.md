@@ -48,7 +48,7 @@ Supported formats are:
         5   books    book    NOUN    NNS
         6   .        .       PUNCT   .
 	
-  * osl: One sentence per line, custom delimiter for annotation
+  * osl: One sentence per line, custom delimiter for annotation, tokens separated by space
 	
 	    They/they/PRON/PRP buy/buy/VERB/VBP and/and/CONJ/CC sell/sell/VERB/VBP books/book/NOUN/NNS ././PUNCT/.
 	
