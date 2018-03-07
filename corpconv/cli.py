@@ -11,6 +11,45 @@ from corpconv import corpus_writers
 
 # format, --only-tokens, delimiter, number of fields
 
+"""foo
+
+This converter can convert between corpus formats that can be expressed using the following model:
+- A corpus consists of sentences that are separated by a sentence delimiter.
+- A sentence consists of tokens that are separated by a token delimiter.
+- A token consists of fields (e.g. word form, part of speech, lemma, …) that are separated by a field delimiter.
+Sentences and tokens may have IDs and fields may have missing values.
+
+
+Sentence delimiter:
+  - e: empty line
+  - n: newline (only if not used as token delimiter)
+  - x: XML tag on a separate line (s-tag by default; can be customized via the --xml-tag option)
+Token delimiter:
+  - n: newline
+  - s: space
+  - t: tab
+Field delimiter:
+  - s: space (only if not used as token delimiter)
+  - t: tab (only if not used as token delimiter)
+  - character used as delimiter, e.g. /
+Sentence IDs:
+  - c: comment on preceding line (default pattern: '^# sent_id = (.+)')
+  - n: no sentence IDs
+  - s: at the beginning of the line, separated by a space (only if token delimiter is space or tab)
+  - t: at the beginning of the line, separated by a tab (only if token delimiter is space or tab)
+  - x: XML attribute (only if sentence delimiter is XML; id-attribute by default; can be customized via the --xml-id option)
+Token IDs:
+  - n: no token IDs
+  - zero-based field index containing the ID
+Missing values:
+  - e: empty string
+  - n: no missing values (checks that there a no missing values)
+  - character used for empty fields, e.g. _
+
+"""
+
+
+
 def arguments():
     parser = argparse.ArgumentParser(description="Convert a corpus from a given input format to the desired output format.")
     parser.add_argument("-i", "--input-format", choices=["conll", "osl", "tsv", "vrt"], required=True, help="Input format. conll: Tab-separated, one token per line with token id, empty line after sentences, empty fields marked with \"_\"; osl: One sentence per line, custom delimiter for annotation, tokens separated by space; tsv: Tab-separated, one token per line, empty line after sentences; vrt: Tab-separated, one token per line, sentences as s-tags")
