@@ -19,6 +19,9 @@ This converter can convert between corpus formats that can be expressed using th
 - A token consists of fields (e.g. word form, part of speech, lemma, …) that are separated by a field delimiter.
 Sentences and tokens may have IDs and fields may have missing values.
 
+When converting from a format that does not have IDs to one that has, IDs of the form '[st]\d+' will be generated.
+
+The input and output formats are specified via a six-character string. The six characters represent the choices for sentence delimiter, token delimiter, field delimiter, sentence ID, token ID, and missing values.
 
 Sentence delimiter:
   - e: empty line
@@ -33,7 +36,7 @@ Field delimiter:
   - t: tab (only if not used as token delimiter)
   - character used as delimiter, e.g. /
 Sentence IDs:
-  - c: comment on preceding line (default pattern: '^# sent_id = (.+)')
+  - c: comment on preceding line (default pattern: '^# sent_id = (.+)'; can be customized)
   - n: no sentence IDs
   - s: at the beginning of the line, separated by a space (only if token delimiter is space or tab)
   - t: at the beginning of the line, separated by a tab (only if token delimiter is space or tab)
