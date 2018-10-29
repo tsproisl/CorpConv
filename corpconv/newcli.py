@@ -4,8 +4,8 @@ import argparse
 import functools
 import logging
 
-import sentence_reader
-import token_reader
+import reader
+import writer
 
 # format, --only-tokens, delimiter, number of fields
 
@@ -120,11 +120,8 @@ def read_sentences(corpus, format_string, args):
 
 def main():
     args = arguments()
-    raw_sentences = sentence_reader.read_sentences(args.FILE, args.input_format, args)
-    # reader = readers[args.input_format]
-    # writer = writers[args.output_format]
-    # for line in writer(reader(args.FILE)):
-    #     print(line)
+    sentences = reader.read_sentences(args.FILE, args.input_format, args)
+    writer.write_sentences(sentences, args.output_format, args)
 
 
 if __name__ == "__main__":
