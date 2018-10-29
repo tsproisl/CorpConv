@@ -5,8 +5,8 @@ import logging
 import re
 
 Sentence = collections.namedtuple("Sentence", ["id", "tokens"])
-Token = collections.namedtuple("Sentence", ["id", "fields"])
-RawSentence = collections.namedtuple("Sentence", ["id", "lines"])
+Token = collections.namedtuple("Token", ["id", "fields"])
+RawSentence = collections.namedtuple("RawSentence", ["id", "lines"])
 Line = collections.namedtuple("Line", ["number", "text"])
 
 
