@@ -12,6 +12,8 @@ Line = collections.namedtuple("Line", ["number", "text"])
 
 def read_sentences(corpus, format_string, args):
     sent_del, tok_del, field_del, sent_id, tok_id, missing = format_string
+    if tok_id != "n":
+        tok_id = int(tok_id)
     if sent_del == "e":
         raw_sentences = _read_empty_line(corpus, sent_id)
     elif sent_del == "n":
@@ -25,6 +27,7 @@ def read_sentences(corpus, format_string, args):
 
 def _read_empty_line(corpus, sent_id):
     pattern = re.compile(r'^# sent_id = (.+)$')
+    expect_id = True
     sentence_counter = 0
     sentence_id = None
     lines = []
@@ -41,19 +44,22 @@ def _read_empty_line(corpus, sent_id):
             sentence_counter += 1
             if sentence_id is None:
                 if sent_id != "n":
-                    logging.warning("Missing ID for sentence %d (line %d)", (sentence_counter, line_counter))
+                    logging.warning("Missing ID for sentence %d (line %d)", sentence_counter, line_counter)
                 sentence_id = "s%d" % sentence_counter
             yield RawSentence(sentence_id, lines)
             lines = []
+            expect_id = True
             sentence_id = None
             continue
-        if sent_id == "c" and len(lines) == 0:
-            m = re.search(pattern, line)
-            if m:
-                sentence_id = m.group(1)
-                continue
-            else:
-                logging.warning("Badly formatted file (expected sentence ID in line %d)", line_counter)
+        if sent_id == "c":
+            if expect_id:
+                m = re.search(pattern, line)
+                if m:
+                    sentence_id = m.group(1)
+                    expect_id = False
+                    continue
+                else:
+                    logging.warning("Badly formatted file (expected sentence ID in line %d)", line_counter)
         if sent_id == "s":
             sentence_id, line = line.split(" ", maxsplit=1)
         elif sent_id == "t":
@@ -64,7 +70,7 @@ def _read_empty_line(corpus, sent_id):
         sentence_counter += 1
         if sentence_id is None:
             if sent_id != "n":
-                logging.warning("Missing ID for sentence %d (line %d)", (sentence_counter, line_counter))
+                logging.warning("Missing ID for sentence %d (line %d)", sentence_counter, line_counter)
             sentence_id = "s%d" % sentence_counter
         yield RawSentence(sentence_id, lines)
 
@@ -97,7 +103,7 @@ def _read_newline(corpus, sent_id):
         sentence_counter += 1
         if sentence_id is None:
             if sent_id != "n":
-                logging.warning("Missing ID for sentence %d (line %d)", (sentence_counter, line_counter))
+                logging.warning("Missing ID for sentence %d (line %d)", sentence_counter, line_counter)
             sentence_id = "s%d" % sentence_counter
         yield RawSentence(sentence_id, [Line(line_counter, line)])
         expect_id = True
@@ -120,7 +126,7 @@ def _read_xml(corpus, sent_id, args):
             sentence_counter += 1
             if sentence_id is None:
                 if sent_id != "n":
-                    logging.warning("Missing ID for sentence %d (line %d)", (sentence_counter, line_counter))
+                    logging.warning("Missing ID for sentence %d (line %d)", sentence_counter, line_counter)
                 sentence_id = "s%d" % sentence_counter
             yield RawSentence(sentence_id, lines)
             lines = []
@@ -147,7 +153,7 @@ def _read_raw_tokens(raw_sentences, tok_del):
     for sentence_id, lines in raw_sentences:
         if tok_del == "s" or tok_del == "t":
             if len(lines) > 1:
-                logging.warning("Sentence %s spans multiple lines (%d–%d). Skipping sentence.", (sentence_id, lines[0].number, lines[-1].number))
+                logging.warning("Sentence %s spans multiple lines (%d–%d). Skipping sentence.", sentence_id, lines[0].number, lines[-1].number)
                 continue
             if tok_del == "s":
                 toks = lines[0].split(" ")
@@ -164,7 +170,7 @@ def _read_fields(raw_tokens, field_del, tok_id, missing):
     n_fields = None
     for sentence_id, toks, tok_lines in raw_tokens:
         tokens = []
-        for token_number, tok, tok_line in enumerate(zip(toks, tok_lines), start=1):
+        for token_number, (tok, tok_line) in enumerate(zip(toks, tok_lines), start=1):
             if field_del == "n":
                 fields = [tok]
             elif field_del == "s":
@@ -176,7 +182,7 @@ def _read_fields(raw_tokens, field_del, tok_id, missing):
             if n_fields is None:
                 n_fields = len(fields)
             if len(fields) != n_fields:
-                logging.warning("Line %d has %d fields instead of %d!", (tok_line, len(fields), n_fields))
+                logging.warning("Line %d has %d fields instead of %d!", tok_line, len(fields), n_fields)
             if tok_id == "n":
                 token_id = "t%d" % token_number
             else:
